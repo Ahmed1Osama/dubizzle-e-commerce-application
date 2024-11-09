@@ -37,8 +37,8 @@ Search For Product
     ${listSize} =    Get Length    ${searchResult}
     Log    Number of search results: ${listSize}
     FOR    ${element}    IN    @{searchResult}
-        ${element_text}=    Get Text    ${element}
-        Log    Product Name: ${element_text}
+        ${elementText}=    Get Text    ${element}
+        Log    Product Name: ${elementText}
     END
 
 Search with Suggestions
@@ -59,37 +59,42 @@ Search with Suggestions
 
 Search with Multiple Filters
     [Arguments]    ${productName}    ${minPrice}    ${maxPrice}
-    Input Text    ${searchBarFieldPath}    ${productName}
-    Click Element    ${searchbuttonpath}
-    Wait Until Element Is Visible    ${searchResultPath}
-    #Sleep    20s      
-    Scroll Element Into View    ${minPricePath}
-      
-    Input Text    ${minPricePath}    ${minPrice}
-    Input Text    ${maxPricePath}    ${maxPrice}
-    Press Keys    ${maxPricePath}    ENTER
+     Input Text    ${searchBarFieldPath}    ${productName}
+     Click Element    ${searchbuttonpath}
+     Wait Until Element Is Visible    ${searchResultPath}
+
+     
+       Wait Until Element Is Visible    ${minPricePath}    timeout=30s
+       Wait Until Element Is Enabled    ${minPricePath}    timeout=20s
+        Scroll Element Into View    ${minPricePath}
+        ${getMinField}=     Get WebElement    ${minPricePath}
+        Input Text    ${getMinField}    ${minPrice}
+    
+        ${getMaxField}=     Get WebElement    ${maxPricePath}
+         Input Text   ${getMaxField}    ${maxPrice}
+         Click Button    ${searchbuttonpath} 
 
               #sorting by section 
-    Click Element    ${sortBybtnPath}
-    Wait Until Element Is Visible    ${sortByList}
-    @{sortResultList}=    Get WebElements    ${sortByList}
-    ${listSize} =    Get Length    ${sortResultList}
+     Click Element    ${sortBybtnPath}
+     Wait Until Element Is Visible    ${sortByList}
+     @{sortResultList}=    Get WebElements    ${sortByList}
+     ${listSize} =    Get Length    ${sortResultList}
     Log    Number of sort options: ${listSize}
-    ${randomIndex} =    Evaluate    random.randint(0, ${listSize} - 1)    random
-    ${randomElement} =    Get From List    ${sortResultList}    ${randomIndex}
-    ${randomElementText} =    Get Text    ${randomElement}
-    Log    Random element text: ${randomElementText}
-    Click Element    ${randomElement}
+     ${randomIndex} =    Evaluate    random.randint(0, ${listSize} - 1)    random
+     ${randomElement} =    Get From List    ${sortResultList}    ${randomIndex}
+     ${randomElementText} =    Get Text    ${randomElement}
+     Log    Random element text: ${randomElementText}
+     Click Element    ${randomElement}
         #search result log
-   @{searchResult}=    Get WebElements    ${searchResultPath}
-   ${listSize} =    Get Length    ${searchResult}
-   Log    Number of search results: ${listSize}
+     @{searchResult}=    Get WebElements    ${searchResultPath}
+     ${listSize} =    Get Length    ${searchResult}
+     Log    Number of search results: ${listSize}
         #verify  Filters remain applied after page reload.
-    Reload Page
-    Wait Until Page Contains Element     xpath=//span[@class='_8206696c']
-    ${displayedSortOption} =    Get Text    //span[@class='_8206696c']
-    Should Be Equal As Strings    ${displayedSortOption}    ${randomElementText}
-    Log    Verified that the displayed sort option is: ${displayedSortOption}
+     Reload Page
+     Wait Until Page Contains Element     xpath=//span[@class='_8206696c']
+     ${displayedSortOption} =    Get Text    //span[@class='_8206696c']
+     Should Be Equal As Strings    ${displayedSortOption}    ${randomElementText}
+     Log    Verified that the displayed sort option is: ${displayedSortOption}
 
 
 Real Time Filter
