@@ -59,22 +59,19 @@ Search with Suggestions
 
 Search with Multiple Filters
     [Arguments]    ${productName}    ${minPrice}    ${maxPrice}
-     Input Text    ${searchBarFieldPath}    ${productName}
-     Click Element    ${searchbuttonpath}
-     Wait Until Element Is Visible    ${searchResultPath}
-
-     
+     Search For Product    ${productName}    
        Wait Until Element Is Visible    ${minPricePath}    timeout=30s
        Wait Until Element Is Enabled    ${minPricePath}    timeout=20s
-        Scroll Element Into View    ${minPricePath}
-        ${getMinField}=     Get WebElement    ${minPricePath}
-        Input Text    ${getMinField}    ${minPrice}
+      #  Scroll Element Into View    ${minPricePath}
+       # ${getMinField}=     Get WebElement    ${minPricePath}
+      #  Input Text    ${getMinField}    ${minPrice}
     
-        ${getMaxField}=     Get WebElement    ${maxPricePath}
-         Input Text   ${getMaxField}    ${maxPrice}
-         Click Button    ${searchbuttonpath} 
+     #   ${getMaxField}=     Get WebElement    ${maxPricePath}
+    #     Input Text   ${getMaxField}    ${maxPrice}
+   #      Click Button    ${searchbuttonpath} 
 
               #sorting by section 
+Sort Results Randomly           
      Click Element    ${sortBybtnPath}
      Wait Until Element Is Visible    ${sortByList}
      @{sortResultList}=    Get WebElements    ${sortByList}
@@ -99,21 +96,14 @@ Search with Multiple Filters
 
 Real Time Filter
     [Arguments]    ${category}
-    
-    # Step 1: Retrieve the List of Categories
     @{categoryList}=    Get WebElements    ${categoryPath}
-    
-    # Step 2: Loop through Category List to Find and Click the Target Category
     ${found} =    Set Variable    False
     FOR    ${element}    IN    @{categoryList}
         ${elementText}=    Get Text    ${element}
-        # Trim the whitespace to handle any hidden spaces or line breaks
         ${trimmedText}=    Trim Whitespace    ${elementText}
         Run Keyword If    '${trimmedText}' == '${category}'    Click Element    ${element}
         Run Keyword If    '${trimmedText}' == '${category}'    Set Variable    ${found}    True
         Run Keyword If    '${found}' == True    Exit For Loop
     END
-
-    # Step 3: Verify that Category Was Found and Clicked
     Run Keyword If    '${found}' == False    Fail    Category '${category}' not found in the list.
 
