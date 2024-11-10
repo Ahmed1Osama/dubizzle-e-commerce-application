@@ -16,7 +16,7 @@ ${dubizzleLogoPath}        xpath=//div[@class="b6da2e8f"]
 ${searchbuttonpath}    xpath=//button[@aria-label="Search"]
 ${searchResultPath}    xpath=//div[@class="e53698e2"]//ul//li
 ${suggestionsListPath}    xpath=//div[@class="_8185b4e8"]//button
-${minPricePath}          xpath=//input[@placeholder='Min']     #xpath=//div[@class="_4532be3c"]//div[@class="_4fe2dfc1"]//div[@class="_5aeede43 a3b3711b"]//input[@placeholder="Min"]
+${minPricePath}          xpath=//div[@class="_4532be3c"]//div[@class="_4fe2dfc1"]//div[@class="_5aeede43 a3b3711b"]//input[@placeholder="Min"]
 ${maxPricePath}    xpath=//div[@class="_5aeede43 a3b3711b"]//input[@placeholder="Max"]
 ${sortBybtnPath}    xpath=//div[@class="_948d9e0a dee7163c _371e9918"]
 ${sortByList}    xpath=//div[@class="_948d9e0a dee7163c _371e9918"]//ul//li
@@ -62,15 +62,12 @@ Search with Multiple Filters
      Search For Product    ${productName}    
        Wait Until Element Is Visible    ${minPricePath}    timeout=30s
        Wait Until Element Is Enabled    ${minPricePath}    timeout=20s
-      #  Scroll Element Into View    ${minPricePath}
-       # ${getMinField}=     Get WebElement    ${minPricePath}
-      #  Input Text    ${getMinField}    ${minPrice}
-    
-     #   ${getMaxField}=     Get WebElement    ${maxPricePath}
-    #     Input Text   ${getMaxField}    ${maxPrice}
-   #      Click Button    ${searchbuttonpath} 
+      Scroll Element Into View    ${minPricePath}
+        Input Text    ${minPricePath}   ${minPrice}
+        Input Text   ${maxPricePath}   ${maxPrice}
+         Click Button    ${searchbuttonpath} 
 
-              #sorting by section 
+             
 Sort Results Randomly           
      Click Element    ${sortBybtnPath}
      Wait Until Element Is Visible    ${sortByList}
